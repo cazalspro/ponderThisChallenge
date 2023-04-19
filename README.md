@@ -1,15 +1,16 @@
+
 # ponderThisChallenge
-Problem formulation
+Problem formulation :
 
 A game is played on an n*n grid of lightbulbs. We are given an initial state where some of the bulbs are off and some are on. Then, at every step a bulb in the off state is chosen.
 
 The bulb is turned on, and every other bulb in the row and in the column of the bulb is toggled: If it was on, it turns off, and vice versa.
 
-The goal of the game is to reach a grid where all the light bulbs are on. We use a coordinate system where the grid cell at column x and row y , with 1 <= x,y <= n is denoted by (x,y) , where (1,1) is the bottom-left grid cell. A solution is denoted by a list of coordinates of the corresponding bulbs.
+The goal of the game is to reach a grid where all the light bulbs are on. We use a coordinate system where the grid cell at column x and row y , with 1 $\leqslant$ x,y $\leqslant$ n is denoted by (x,y) , where (1,1) is the bottom-left grid cell. A solution is denoted by a list of coordinates of the corresponding bulbs.
 
 More informations and instances on : https://research.ibm.com/haifa/ponderthis/challenges/April2023.html
 
-Current state
+Current state :
 
 I haven't finished yet and the code will evolve regularly. For now I can partially solve the problem but I don't yet take into account that the lights should be off when I turn them on. I have ideas on how to do it but they are not implemented yet. 
 I also think that I will have to use another solver than GLPK to succeed in solving the requested instances.
