@@ -20,8 +20,8 @@ class Instance:
 
 		#Index generation
 
-		model.rows = pe.Set(initialize = set(range(0,self.matrixSize)))
-		model.cols = pe.Set(initialize = set(range(0,self.matrixSize)))
+		model.rows = pe.Set(initialize = range(0,self.matrixSize))
+		model.cols = pe.Set(initialize = range(0,self.matrixSize))
 
 		#Initial state matrix generation
 
@@ -31,19 +31,20 @@ class Instance:
 
 		model.x = pe.Var(model.rows, model.cols, domain = pe.Binary)
 
-		# Objective function
+		# Objective function, aim at minimizing the sum of the variables
 
 		expr = sum(model.x[l,c] for l in model.rows for c in model.cols)
 		model.objective = pe.Objective(sense = pe.minimize, expr = expr)
 
 		# Constraint 1 : Final state is a 1-matrix
+		# for each element (x,y) of the matrix, check that the sum of the light bulbs lit in the row x and the column y plus the intial state of (x,y) are congruent to 1 mod 2
 
 		model.constraint1 = pe.ConstraintList()
 		    
 		    #Variable list for computing modulos
 		model.varMod = pe.Var(model.rows, model.cols, domain = pe.Integers)
 
-		    #Constraint
+		    #Constraints adding
 		for l in model.rows:
 			for c in model.cols:
 				sumCurrentRows = sum(model.x[ltmp,c] for ltmp in model.rows)
@@ -60,7 +61,7 @@ class Instance:
 
 	def solveInstance(self):
 		solver = pe.SolverFactory('glpk')
-		solver.solve(self.model, tee=True)
+		solver.solve(self.model, tee = True)
 
 	def checkSol(self):
 		correct = True
@@ -81,10 +82,10 @@ class Instance:
 		df['x'] = [pe.value(model.x[key]) for key in df.index]
 		df['etatInitial'] = [model.initialState[key] for key in df.index]
 
+		print("Initial Matrix")
 		print((df['etatInitial']).unstack('col'))
+		print("Turned on bulbs")
 		print((df['x']).unstack('col'))
-		#print((df['x']).groupby('row').sum().to_frame())
-		#print(df['x'].groupby('col').sum().to_frame().T)
 
 
 
@@ -94,6 +95,7 @@ test = Instance("matrice.txt")
 test.genereMIP()
 test.solveInstance()
 test.printSol()
+print("Solution is correct ?")
 print(test.checkSol())
 
 
