@@ -8,9 +8,42 @@ import math
 
 class Instance:
 	def __init__(self, fileName):
-		self.initialMatrix = ast.literal_eval(fn.parse_Matrix('matrix.txt'))
+		self.initialMatrix = ast.literal_eval(fn.parseMatrix(fileName))
 		self.matrixSize = int(math.sqrt(len(self.initialMatrix)))
 		self.model = None
+
+	def playMove(self, currentMatrix, move):
+		for i in range(self.matrixSize):
+			currentMatrix[i,move[1]] = 1 - currentMatrix[i,move[1]]
+		for j in range(self.matrixSize):
+			currentMatrix[move[0],j] = 1 - currentMatrix[move[0],j]
+		currentMatrix[move[0],move[1]] = 1 - currentMatrix[move[0],move[1]]
+
+	def playSolution(self):
+		matrix = self.initialMatrix
+		for i in self.model.x:
+				if pe.value(self.model.x[i]) == 1:
+					self.playMove(matrix, i)
+		fn.printDictionary(matrix)
+
+	
+
+	def solveInstance(self):
+		solver = pe.SolverFactory('glpk')
+		solver.solve(self.model, tee = True)
+
+	def printSol(self):
+		print("Initial Matrix")
+		fn.printDictionary(self.model.initialState)
+		print("Turned on bulbs")
+		fn.printPyomoDictionary(self.model.x)
+		print("Final state")
+		self.playSolution()
+
+	def test(self):
+		self.genereMIP()
+		self.solveInstance()
+		self.printSol()
 
 	def genereMIP(self):
 
@@ -59,43 +92,16 @@ class Instance:
 
 		self.model = model
 
-	def solveInstance(self):
-		solver = pe.SolverFactory('glpk')
-		solver.solve(self.model, tee = True)
-
-	def checkSol(self):
-		correct = True
-		for l in self.model.rows:
-			for c in self.model.cols:
-				a = sum(pe.value(self.model.x[ltmp,c]) for ltmp in self.model.rows) + sum(pe.value(self.model.x[l,ctmp]) for ctmp in self.model.cols) - pe.value(self.model.x[l,c]) + pe.value(self.model.initialState[l,c])
-				if a % 2 == 0:
-					correct = False
-		return correct
 
 
 
-
-	def printSol(self):
-		model = self.model
-
-		df = pd.DataFrame(index = pd.MultiIndex.from_tuples(model.x,names = ['row','col']))
-		df['x'] = [pe.value(model.x[key]) for key in df.index]
-		df['etatInitial'] = [model.initialState[key] for key in df.index]
-
-		print("Initial Matrix")
-		print((df['etatInitial']).unstack('col'))
-		print("Turned on bulbs")
-		print((df['x']).unstack('col'))
+instanceTest = Instance("matrix.txt")
+instanceTest.test()
 
 
 
 
 
-test = Instance("matrice.txt")
-test.genereMIP()
-test.solveInstance()
-test.printSol()
-print("Solution is correct ?")
-print(test.checkSol())
+
 
 

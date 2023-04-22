@@ -1,10 +1,21 @@
+import pandas as pd
+import pyomo.environ as pe
+
+def printDictionary(dictionnary):
+	df = pd.DataFrame(index = pd.MultiIndex.from_tuples(dictionnary,names = ['row','col']))
+	df['etatInitial'] = [dictionnary[key] for key in df.index]
+
+	print((df['etatInitial']).unstack('col'))
+
+def printPyomoDictionary(pyomoDict):
+	df = pd.DataFrame(index = pd.MultiIndex.from_tuples(pyomoDict,names = ['row','col']))
+	df['etatInitial'] = [pe.value(pyomoDict[key]) for key in df.index]
+
+	print((df['etatInitial']).unstack('col'))
 
 
 
-
-
-
-def parse_Matrix(fileName):
+def parseMatrix(fileName):
     with open(fileName, "r") as f:
             lines = f.readlines()
             parsed_matrix = "{"
