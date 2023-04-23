@@ -1,16 +1,17 @@
 import pandas as pd
 import pyomo.environ as pe
 
+
+
+
 def printDictionary(dictionnary):
 	df = pd.DataFrame(index = pd.MultiIndex.from_tuples(dictionnary,names = ['row','col']))
 	df['etatInitial'] = [dictionnary[key] for key in df.index]
-
 	print((df['etatInitial']).unstack('col'))
 
 def printPyomoDictionary(pyomoDict):
 	df = pd.DataFrame(index = pd.MultiIndex.from_tuples(pyomoDict,names = ['row','col']))
 	df['etatInitial'] = [pe.value(pyomoDict[key]) for key in df.index]
-
 	print((df['etatInitial']).unstack('col'))
 
 

@@ -12,5 +12,6 @@ More informations and instances on : https://research.ibm.com/haifa/ponderthis/c
 
 __Current state :__
 
-I haven't finished yet and the code will evolve regularly. For now I can partially solve the problem but I don't yet take into account that the lights should be off when I turn them on. I have ideas on how to do it but they are not implemented yet. 
+The model is correct but generates many constraints ($O(n⁶)$), I will improve it in the next commit, as well as the code readability.
+
 I also think that I will have to use another solver than GLPK to succeed in solving the requested instances.
