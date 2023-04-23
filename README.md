@@ -12,6 +12,6 @@ More informations and instances on : https://research.ibm.com/haifa/ponderthis/c
 
 __Current state :__
 
-The model is correct but generates many constraints ($O(n⁶)$), I will improve it in the next commit, as well as the code readability.
+The model is correct but generates many constraints (O(n⁶)), I will improve it in the next commit, as well as the code readability.
 
 I also think that I will have to use another solver than GLPK to succeed in solving the requested instances.
